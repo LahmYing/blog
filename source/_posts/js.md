@@ -6,6 +6,12 @@ tags: js
 
 <!-- toc -->
 
+# this
+
+非箭头函数：会变动，运行时确定，可用 call() 改写后确定
+
+箭头函数：定义时确定，本身没绑定 this，取父级的 context，最近的 {} 即为父级
+
 # arguments
 
 ```js
