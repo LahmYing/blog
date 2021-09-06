@@ -94,7 +94,7 @@ https://www.liaoxuefeng.com/wiki/896043488029600
 /************* 合并 ***********************/
 // git merge --abort   //中止合并
 // git reset --merge   //撤销合并
-// git pull            
+// git pull
 
 /************* 版本回退 ***********************/
 // git reset --hard 3e744

@@ -6,7 +6,23 @@ tags: [html, 浏览器]
 
 <!-- toc -->
 
+# template 不与数据结构耦合
+
+除非动态生成的&有较强一致性的如表格，一般建议平铺，嫌重复代码多的话就将其塞入小组件，外面引用小组件看起来就清爽些了
+
+# BOM(browser object model)
+
+BOM 包含 5 个东西
+
+- location 管理 URL
+- navigator 管理浏览器
+- history 管理历史记录
+- screen 管理屏幕
+- window 管理浏览器所有的东西
+
 # 浏览器渲染流程
+
+{% asset_img 浏览器渲染流程.png 800 600 浏览器渲染流程 %}
 
 - CSS 解析不会影响 HTML 解析，但会阻塞 js 的加载（即要等前面的 CSS 加载完）
 - js 会阻塞 HTML 和 CSS 的解析

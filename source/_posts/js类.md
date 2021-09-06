@@ -73,7 +73,6 @@ class Son extends Father {
     return super.classMethod() + ", 从super对象上调用父类静态方法";
   }
 }
-
 ```
 
 # es5
@@ -89,7 +88,7 @@ function Person() {
   };
 }
 // 实例属性
-Person.prototype.sex = "男"; 
+Person.prototype.sex = "男";
 // 实例方法
 Person.prototype.work = function () {
   console.log(this.name + "在工作");
@@ -103,5 +102,4 @@ let p = new Person();
 console.log(p.name);
 p.run();
 p.work();
-
 ```

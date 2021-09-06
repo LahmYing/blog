@@ -16,6 +16,10 @@ import "view-design/dist/styles/iview.css";
 import "./assets/customTheme/index.less";
 ```
 
+# vue 插件
+
+https://github.com/vuejs/awesome-vue
+
 # 样式覆盖、Vue 的 scoped 和 /deep/
 
 {% asset_img Vue的scoped和deep.png 1000 1000 image desc %}
@@ -68,7 +72,7 @@ export default class ChannelList extends Vue {
   // life hook
   created() {
     this.showDelModal = true;
-    
+
     console.log("no-next-tick-value", this.showDelModal);
     console.log("no-next-tick-dom", document.getElementById("next-tick-html"));
     this.$nextTick(() => {

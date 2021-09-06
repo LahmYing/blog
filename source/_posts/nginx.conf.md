@@ -38,12 +38,12 @@ http {
     #                  '"$http_user_agent" "$http_x_forwarded_for"';
 
     #access_log  logs/access.log  main;
-  
+
     # 开启高效文件传输模式，sendfile指令指定nginx是否调用sendfile函数来输出文件，
     # 对于普通应用设为 on，如果用来进行下载等应用磁盘IO重负载应用，可设置为off，
     # 以平衡磁盘与网络I/O处理速度，降低系统的负载。注意：如果图片显示不正常把这个改成off。
     sendfile        on;
-  
+
     #tcp_nopush     on; #防止网络阻塞
 
     #keepalive_timeout  0;
@@ -66,7 +66,7 @@ http {
         location / {
             # 尝试读取 root + index，即 /data/app/nginx/html/dist/index.html
             index  index.html;
-      
+
             # $uri  这个是nginx的一个变量，存放着用户访问的地址,
             # 比如：http://www.xxx.com/index.html, 那么$uri就是 /index.html
             # $uri/ 代表访问的是一个目录，比如：http://www.xxx.com/hello/test/    ，

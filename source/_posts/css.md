@@ -6,6 +6,11 @@ tags: [css]
 
 <!-- toc -->
 
+# js css 共享变量
+
+[https://segmentfault.com/a/1190000018795983?utm_source=tag-newest](https://segmentfault.com/a/1190000018795983?utm_source=tag-newest)
+[https://www.npmjs.com/package/sass-resources-loader](https://www.npmjs.com/package/sass-resources-loader)
+
 # CSS 逻辑属性
 
 ## -inline 和 -block
