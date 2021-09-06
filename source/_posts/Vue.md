@@ -39,3 +39,43 @@ import "./assets/customTheme/index.less";
 # Vue router history mode
 
 需要服务端支持，只需要服务端在遇到任何路由都返回 index.html 即可（前端为单页应用的话）
+
+# vuex
+
+默认情况下，模块内部的 action、mutation 和 getter 是注册在全局命名空间的——这样使得多个模块能够对同一 mutation 或 action 作出响应
+
+# nextTick
+
+值更新， 值对应的 dom 未更新， 此时你想基于`更新后的 dom`执行 A 函数，需将 A 函数放于 nextTick 内
+
+```vue
+<template>
+  <div class="channel-manage">
+    channel-manage
+    <div id="next-tick-html">{{ "showDelModal: " }}{{ showDelModal }}</div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+import { State, Getter, Action } from "vuex-class";
+
+// required even empty
+@Component({})
+export default class ChannelList extends Vue {
+  showDelModal = false;
+
+  // life hook
+  created() {
+    this.showDelModal = true;
+    
+    console.log("no-next-tick-value", this.showDelModal);
+    console.log("no-next-tick-dom", document.getElementById("next-tick-html"));
+    this.$nextTick(() => {
+      console.log("next-tick-value", this.showDelModal);
+      console.log("next-tick-dom", document.getElementById("next-tick-html"));
+    });
+  }
+}
+</script>
+```
