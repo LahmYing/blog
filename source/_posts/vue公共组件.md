@@ -1,0 +1,184 @@
+---
+title: vue公共组件
+date: 2021-09-08 20:04:59
+tags: [组件]
+---
+
+<!-- toc -->
+
+# 参考写法
+
+## 重点
+
+在单例上进行扩展和处理
+
+## 文件结构
+
+```txt
+message
+- index.ts
+- Message.vue
+```
+
+### index.ts
+
+```ts
+import Message from "./Message.vue";
+
+export type MessageType = "default" | "success" | "error" | "warning";
+
+export interface MessageOptions {
+  type?: MessageType;
+  time?: number;
+  callback?: () => void;
+}
+
+//  单例模式
+let vm;
+
+const install = (Vue) => {
+  let Component = Vue.extend(Message);
+
+  Vue.prototype.$message = (
+    content: String,
+    options?: MessageType | MessageOptions
+  ) => {
+    let data = {
+      content,
+    };
+
+    if (vm) {
+      vm.$destroy();
+    }
+
+    if (typeof options === "string") {
+      data["type"] = options;
+    } else {
+      Object.assign(data, options);
+    }
+
+    let instance = new Component({
+      data,
+    });
+
+    vm = instance.$mount();
+    vm.show = true;
+
+    vm.$on("destroyed", () => {
+      vm = null;
+    });
+
+    return vm;
+  };
+};
+
+export default {
+  install,
+  Message,
+};
+```
+
+### Message.vue
+
+```vue
+<template>
+  <transition name="slide" @after-leave="afterLeave">
+    <div v-if="show" :class="component_class" @click="show = false">
+      {{ content }}
+    </div>
+  </transition>
+</template>
+
+<style lang="less" scoped>
+.message {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  font-size: 14px;
+  color: #333;
+  padding: 5px 10px;
+  text-align: center;
+  overflow: hidden;
+  opacity: 0.9;
+  border-radius: 4px;
+  min-width: 60px;
+  max-width: 60%;
+  word-break: break-all;
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.16);
+  transform: translate(-50%, 0);
+  z-index: 10001;
+
+  &.default {
+    color: #fff;
+    background-color: #333;
+  }
+
+  &.success {
+    color: #fff;
+    background-color: @success;
+  }
+
+  &.warning {
+    color: #fff;
+    background-color: @warning;
+  }
+
+  &.error {
+    color: #fff;
+    background-color: @error;
+  }
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s;
+}
+.slide-enter,
+.slide-leave-to {
+  transform: translate(-50%, 10px);
+  opacity: 0;
+}
+</style>
+
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+
+@Component({})
+export default class Toast extends Vue {
+  show = false;
+  content = "";
+  time = 2000;
+  type = "default";
+  callback = null;
+
+  get component_class() {
+    return ["message", `${this.type}`];
+  }
+
+  mounted() {
+    document.body.appendChild(this.$el);
+    this.time && setTimeout(this.close, this.time);
+  }
+
+  beforeDestroy() {
+    document.body.removeChild(this.$el);
+    this.callback &&
+      this.$nextTick(() => {
+        this.callback();
+      });
+  }
+
+  destroyed() {
+    this.$emit("destroyed");
+  }
+
+  close() {
+    this.show = false;
+  }
+
+  afterLeave() {
+    this.$destroy();
+  }
+}
+</script>
+```

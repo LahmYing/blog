@@ -7,7 +7,7 @@
     "clean": "hexo clean",
     "deploy": "hexo deploy",
     "serve": "hexo server",
-    "format": "prettier -w ./*/*/*.md"
+    "format": "prettier -w ./source/**/*.md"
   },
   "hexo": {
     "version": "5.4.0"
