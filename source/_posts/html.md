@@ -6,6 +6,20 @@ tags: [html, 浏览器]
 
 <!-- toc -->
 
+# 请求头不发送 Referer
+
+https://segmentfault.com/q/1010000000123441
+https://blog.csdn.net/qq_37236241/article/details/119330230
+
+```js
+openWithoutReferer(url) {
+    window.open(
+      "javascript:window.name;",
+      "<script>location.replace('" + url + "')</scr" + "ipt>"
+    );
+}
+```
+
 # template 不与数据结构耦合
 
 除非动态生成的&有较强一致性的如表格，一般建议平铺，嫌重复代码多的话就将其塞入小组件，外面引用小组件看起来就清爽些了
