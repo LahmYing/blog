@@ -100,3 +100,22 @@ https://www.liaoxuefeng.com/wiki/896043488029600
 // git reset --hard 3e744
 // 3e744 为版本号前几位
 ```
+
+## 查看远程与本地分支对应关系
+
+`git remote show origin`
+再运行一次 `git branch -a` 就能看到变化了
+
+## 刷新远程分支（有的远程分支已删除但本地仍显示）
+
+`git remote prune origin`
+
+```sh
+lanying@lanyingdeMacBook-Pro some-project % git remote prune origin
+Pruning origin
+URL: git@xxx/some-project.git
+ * [pruned] origin/dev
+ * [pruned] origin/feat-0910
+ * [pruned] origin/test
+lanying@lanyingdeMacBook-Pro some-project %
+```
