@@ -9,9 +9,16 @@ tags: js
 # es6
 
 {% asset_img class_es6.png 1000 1000 %}
+class 内部都挂在 prototype 上，方便继承
 
 ```js
 class Father {
+  // 实例属性方法新写法，无需放在 constructor 内
+  // [methodName]() {} // methodName 可采用表达式
+  // toString() { // === Father.prototype.toString
+  //   return "(" + this.x + ", " + this.y + ")";
+  // }
+
   // 内部都挂在 prototype 上
   // === Father.prototype.constructor
   constructor(x, y) {
@@ -20,17 +27,11 @@ class Father {
     if (new.target === Father) {
       this.x = x; // 实例属性
       this.y = y;
-      this.#x = x; // 私有属性
-      this.#y = y;
-    } else {
+      // this.#x = x; // 私有属性
+      // this.#y = y;
+    } else if (typeof new.target !== "function") {
       throw new Error("必须使用 new 命令生成实例");
     }
-  }
-
-  // 实例方法
-  // === Father.prototype.toString
-  toString() {
-    return "(" + this.x + ", " + this.y + ")";
   }
 
   // reset 属性的存取行为
@@ -41,70 +42,44 @@ class Father {
     console.log("setter: " + value);
   }
 
-  // 属性名，可以采用表达式
-  [methodName]() {
-    // ...
-  }
-
   // 静态属性
   static staticProp = 1;
   // 静态方法
   static classMethod() {
     // 这里的 this 指向 class
     // 实例属性、方法内的 this 指向实例
+    this.staticProp = this.staticProp + "staticProp";
     return "hello";
   }
 
   // 私有方法
-  #sum() {
-    return this.#x + this.#y;
-  }
+  // #sum() {
+  //   return this.#x + this.#y;
+  // }
 }
+
+let f = new Father("X", "Y");
+console.log(f);
+
+console.log(Father === Father.prototype.constructor); // true
+console.log("f.prop ===", f.prop);
 
 class Son extends Father {
   constructor(x, y) {
-    super(x, y); // 调用父类的 constructor(x, y)
+    // 调用父类的 constructor(x, y)
+    // super 作为函数 super() 只能在子类构造函数中使用
+    super(x, y);
     console.log("new.target", new.target);
   }
   superToString() {
+    // 在实例方法中，super 指向 Father.prototype
     return super.toString();
   }
   static classMethod() {
+    // 静态方法中，super 指向 Father
     return super.classMethod() + ", 从super对象上调用父类静态方法";
   }
 }
-```
-
-# super 语法糖
-
-```js
-class A {
-  constructor() {
-    this.f2 = () => console.log("a.f2"); // 原型链上的属性
-    this.f3.aa = "A"; // 原型链上的属性
-  }
-  f() {
-    console.log("a.f");
-  } //  A 的静态属性
-  f1() {
-    console.log("a.f1");
-  } //  A 的静态属性
-  f3() {} //  A 的静态属性
-}
-
-class B extends A {
-  constructor() {
-    super();
-
-    super.f = () => console.log("b.super.f");
-    this.f(); // 'b.super.f'  // B 不允许修改 A 的静态属性, 会被强制改成 this.f()
-    super.f(); // 'a.f'       // B 访问 A 的静态属性
-
-    this.f2(); // 'a.f2'      // 直接继承 原型链上的属性
-  }
-}
-
-// super 其实就是 B._proto_ 加上 B.prototype._proto_ = A.prototype
 ```
 
 # es5
