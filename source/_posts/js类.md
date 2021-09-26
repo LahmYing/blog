@@ -75,11 +75,45 @@ class Son extends Father {
 }
 ```
 
+# super 语法糖
+
+```js
+class A {
+  constructor() {
+    this.f2 = () => console.log("a.f2"); // 原型链上的属性
+    this.f3.aa = "A"; // 原型链上的属性
+  }
+  f() {
+    console.log("a.f");
+  } //  A 的静态属性
+  f1() {
+    console.log("a.f1");
+  } //  A 的静态属性
+  f3() {} //  A 的静态属性
+}
+
+class B extends A {
+  constructor() {
+    super();
+
+    super.f = () => console.log("b.super.f");
+    this.f(); // 'b.super.f'  // B 不允许修改 A 的静态属性, 会被强制改成 this.f()
+    super.f(); // 'a.f'       // B 访问 A 的静态属性
+
+    this.f2(); // 'a.f2'      // 直接继承 原型链上的属性
+  }
+}
+
+// super 其实就是 B._proto_ 加上 B.prototype._proto_ = A.prototype
+```
+
 # es5
 
 ```js
 function Person() {
-  // 静态属性，类独享，只能这样调用 Person.name
+  // 内部变量，内部可访问
+  insideProperty = "insideProperty";
+  // 实例属性
   this.name = "张三";
   this.age = 20;
   // 实例方法
@@ -87,19 +121,25 @@ function Person() {
     console.log(this.name + "在运动");
   };
 }
-// 实例属性
+// 原型属性，实例可使用
 Person.prototype.sex = "男";
-// 实例方法
+// 原型方法，实例可使用
 Person.prototype.work = function () {
   console.log(this.name + "在工作");
 };
 // 静态方法，类独享
 Person.getInfo = function () {
-  console.log("我是静态方法");
+  console.log("静态方法，类独享");
 };
 
 let p = new Person();
-console.log(p.name);
+let p2 = new Person();
+console.log(Person.getInfo());
+console.log("p.name", p.name);
+p2.name = "p2-name";
+console.log("p.name 是否被 p2 影响", p.name === p2.name, p.name);
 p.run();
 p.work();
+Person.insideProperty; // undefined
+p.insideProperty; // undefined
 ```

@@ -117,6 +117,10 @@ PubSub.publish("wem");
 
 # Array
 
+## array.map 是否改变原数组
+
+map 不修改调用它的原数组本身（当然可以在 callback 执行时改变原数组）
+
 ## Array.of
 
 `Array.of()`基本上可以用来替代`Array()`或`new Array()`，并且不存在由于参数不同而导致的重载。它的行为非常统一
@@ -362,10 +366,6 @@ bar(1, 2, 3, 4);
 //[ 2, 3, 4 ]
 ```
 
-# array.map 是否改变原数组
-
-map 不修改调用它的原数组本身（当然可以在 callback 执行时改变原数组）
-
 ```js
 let arr = [
   { name: "Li", age: 10 },
@@ -395,4 +395,295 @@ let a = 3;
 (function ($, exports) {
   exports.Foo = "wem";
 })(jQuery, window);
+```
+
+# 闭包
+
+- 函数 A 有（或返回）内部函数 B，函数 B 中使用了函数 A 的变量 a，这种情况成为闭包
+- 注意不同的闭包实例 a 变量的值
+- 执行的函数或实例被回收后，a 变量才会被回收
+
+```js
+function init() {
+  var name = "Mozilla";
+  function displayName() {
+    alert(name);
+  }
+  // 执行的函数
+  displayName();
+}
+init();
+
+// 注意不同的闭包实例 a 变量的值
+function makeFunc() {
+  var count = 1;
+  function display() {
+    alert(count);
+    count = count + 1;
+  }
+  return display;
+}
+var myFunc = makeFunc(); // 实例
+myFunc(); // 1
+myFunc(); // 2
+myFunc(); // 3
+
+function makeAdder(x) {
+  return function (y) {
+    return x + y;
+  };
+}
+var add5 = makeAdder(5);
+var add10 = makeAdder(10);
+console.log(add5(2)); // 7
+console.log(add10(2)); // 12
+```
+
+# 定义+初始化+赋值
+
+- 与通过 var 声明的有初始化值 undefined 的变量不同，通过 let 声明的变量直到它们的定义被执行时才初始化
+- const 没有赋值这一过程
+
+```js
+console.log(z); // undefined,即 z 被初始化为 undefined
+var z = "z";
+console.log(z); // z
+
+var a = 1;
+console.log(a); // 1
+var a = 2; // 不会报 “重复定义” 的错
+console.log(a); // 2
+
+// 默认为通过 var 定义，挂在 global 下
+console.log(typeof undeclaredVariable); // undefined
+```
+
+# new（创建实例）
+
+比如 `let newObj = new Shape()`
+以下是 new 的目的所在
+
+## 实例获取原型属性/方法
+
+`emptyObj.__proto__ = Shape.prototype`
+
+## 实例获取实例属性/方法
+
+临时空对象 emptyObj， `替换 this` ，返回 emptyObj
+
+```js
+function Shape(inst_name) {
+  console.log(this);
+  this.x = "x,实例属性";
+  this.inst_name = String(inst_name);
+  // 执行时，work.call(this) 换成 work.call(emptyObj)
+  this.work = function () {
+    console.log("work,实例方法");
+  };
+}
+```
+
+# 立即执行函数
+
+优点：独立的作用域，不会污染全局变量（第一个括号内）
+
+```js
+(function () {
+  var age = 12;
+  var name = {
+    first: "Barry",
+    last: "King",
+  };
+  return {
+    name,
+    age,
+  };
+})();
+
+// 赋值（执行后的返回）
+let r = (function () {
+  var age = 12;
+  var name = {
+    first: "Barry",
+    last: "King",
+  };
+  return {
+    name,
+    age,
+  };
+})();
+```
+
+# 深浅拷贝
+
+```js
+// 浅拷贝
+// 1.Object.clone
+// 2.Object.assign
+// 3.扩展符号，比如 let b = [...a],就拷贝了 a 给 b
+
+// 深拷贝
+// 1.JSON.parse(JSON.stringify(object))
+//    stringify 后对象转为字符串，为基本类型，此时再 parse 成新对象时，就不会与老对象共用指针了
+// 缺点：
+//    会忽略 undefined
+//    不能序列化函数
+//    不能解决循环引用的对象
+
+// 2.如果确定没有 循环引用，那就用这个吧
+//deep copy深拷贝
+var deepCopy = function (obj) {
+  const keys = Object.keys(obj); //得到obj里所有的keys
+
+  const newObject = {};
+
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    if (typeof obj[key] === "object") {
+      newObject[key] = deepCopy(obj[key]); // 此处递归
+    } else {
+      newObject[key] = obj[key];
+    }
+  }
+  return newObject;
+};
+
+// 3.最通用的，但对性能有影响，用
+// lodash 的 _.cloneDeep(value) 函数
+
+// 4.如果不想引入 lodash 库，那就用下面这个吧，
+// 保持引用关系
+function cloneForce(x) {
+  // =============
+  const uniqueList = []; // 用来去重
+  // =============
+
+  let root = {};
+
+  // 循环数组
+  const loopList = [
+    {
+      parent: root,
+      key: undefined,
+      data: x,
+    },
+  ];
+
+  while (loopList.length) {
+    // 深度优先
+    const node = loopList.pop();
+    const parent = node.parent;
+    const key = node.key;
+    const data = node.data;
+
+    // 初始化赋值目标，key为undefined则拷贝到父元素，否则拷贝到子元素
+    let res = parent;
+    if (typeof key !== "undefined") {
+      res = parent[key] = {};
+    }
+
+    // =============
+    // 数据已经存在
+    let uniqueData = find(uniqueList, data);
+    if (uniqueData) {
+      parent[key] = uniqueData.target;
+      continue; // 中断本次循环
+    }
+
+    // 数据不存在
+    // 保存源数据，在拷贝数据中对应的引用
+    uniqueList.push({
+      source: data,
+      target: res,
+    });
+    // =============
+
+    for (let k in data) {
+      if (data.hasOwnProperty(k)) {
+        if (typeof data[k] === "object") {
+          // 下一次循环
+          loopList.push({
+            parent: res,
+            key: k,
+            data: data[k],
+          });
+        } else {
+          res[k] = data[k];
+        }
+      }
+    }
+  }
+
+  return root;
+}
+
+function find(arr, item) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].source === item) {
+      return arr[i];
+    }
+  }
+
+  return null;
+}
+```
+
+# 原型
+
+```js
+/*
+每个函数
+都有 prototype 属性，除了 Function.prototype.bind() ，该属性指向原型。
+
+每个对象
+都有 __proto__ 属性，指向了创建该对象的构造函数的原型。
+其实这个属性指向了[[prototype]]，但是[[prototype]] 是内部属性，我们并不能访问到，所以使用 _proto_ 来访问。
+
+原型链
+对象可以通过 __proto__ 来寻找不属于该对象的属性，__proto__ 将对象连接起来组成了原型链
+
+
+Object 是所有对象的爸爸，所有对象都可以通过 __proto__ 找到它
+Function 是所有函数的爸爸，所有函数都可以通过 __proto__ 找到它
+Function.prototype 和 Object.prototype 是两个特殊的对象，他们由引擎来创建
+除了以上两个特殊对象，其他对象都是通过构造器 new 出来的
+函数的 prototype 是一个对象，也就是原型
+对象的 __proto__ 指向原型， __proto__ 将对象和原型连接起来组成了原型链
+
+Object.prototype 的 __proto__  属性是一个访问器属性（一个getter函数和一个setter函数）
+ 暴露了通过它访问的对象的内部[[Prototype]] (一个对象或 null)
+*/
+
+// 例子
+function Shape() {
+  console.log(this);
+  this.x = 999;
+  this.y = 123;
+}
+
+let newObj = new Shape();
+
+// 函数的构造函数往上找
+newObj.constructor; // function Shape()
+Shape.constructor; // function Function()
+
+// 函数的原型的构造函数是函数自己
+Shape.prototype.constructor; // function Shape()
+newObj.__proto__.constructor; // function Shape()
+```
+
+# 堆栈
+
+{% asset_img 栈和堆.png 800 800 %}
+
+# apply-call-bind
+
+```js
+// 后面参数形式不一样而已
+someFunc.apply(context, [1, 2, 3, 4]);
+someFunc.call(context, 1, 2, 3, 4);
+
+// bind 返回一个原函数的拷贝，并拥有指定的 this 值和初始参数
+// function.bind(thisArg[, arg1[, arg2[, ...]]])
+someFunc.bind(context, 1, 2, 3, 4);
 ```
