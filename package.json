@@ -3,12 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "hexo generate",
+    "build": "hexo generate && yarn run format-generated",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
     "serve": "hexo server",
     "preserve": "yarn format",
-    "format": "prettier -w ./source/**/*.md"
+    "format": "prettier -w ./source/**/*.md",
+    "format-generated": "prettier -w ./public/*/**/*.html"
   },
   "hexo": {
     "version": "5.4.0"
