@@ -1,5 +1,5 @@
 ---
-title: js类
+title: class
 date: 2021-04-08 10:44:17
 tags: js
 ---
