@@ -1,7 +1,7 @@
 ---
 title: nginx.conf
 date: 2021-02-26
-tags: nginx
+tags: 网络运维
 ---
 
 <!-- toc -->

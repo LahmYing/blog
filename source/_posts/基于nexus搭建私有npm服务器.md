@@ -1,7 +1,7 @@
 ---
 title: 基于nexus搭建私有npm服务器
 date: 2021-04-08 10:38:32
-tags: [npm, 私服]
+tags: [npm]
 ---
 
 <!-- toc -->
