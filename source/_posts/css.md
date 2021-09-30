@@ -6,6 +6,48 @@ tags: [css]
 
 <!-- toc -->
 
+# 适配刘海屏
+
+https://www.freesion.com/article/4541835441/
+
+[了解 safe-area](https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/adaptivity-and-layout/)
+
+## viewport-fit
+
+## env() 和 constant()
+
+CSS function
+
+```css
+/* constant env 顺序不要改 */
+padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
+padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
+
+padding-bottom: 20px;
+padding-bottom: calc(constant(safe-area-inset-bottom)+20px);
+padding-bottom: calc(env(safe-area-inset-bottom)+20px);
+```
+
+# css3 动画
+
+## animation
+
+```css
+div {
+  animation-name: myfirst;
+  animation-duration: 5s;
+  /* 速度曲线 */
+  animation-timing-function: linear;
+  animation-delay: 2s;
+  /* 播放的次数 */
+  animation-iteration-count: infinite;
+  /* 是否在下一周期逆向地播放 */
+  animation-direction: alternate;
+  /* 是否正在运行或暂停 */
+  animation-play-state: running;
+}
+```
+
 # js css 共享变量
 
 [https://segmentfault.com/a/1190000018795983?utm_source=tag-newest](https://segmentfault.com/a/1190000018795983?utm_source=tag-newest)

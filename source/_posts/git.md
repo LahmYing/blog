@@ -119,3 +119,11 @@ URL: git@xxx/some-project.git
  * [pruned] origin/test
 lanying@lanyingdeMacBook-Pro some-project %
 ```
+
+# 查看 git config
+
+```zsh
+git config --global --list
+# or
+vim ~/.gitconfig
+```
