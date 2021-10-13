@@ -6,6 +6,10 @@ tags: [html, 浏览器]
 
 <!-- toc -->
 
+# 内容安全策略（CSP）
+
+https://blog.csdn.net/qq_37943295/article/details/79978761
+
 # 请求头不发送 Referer
 
 https://segmentfault.com/q/1010000000123441

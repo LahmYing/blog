@@ -13,6 +13,8 @@ https://www.npmjs.com/package/gulp-vue-compiler
 https://www.npmjs.com/package/babel-env
 https://github.com/vuejs/vue-component-compiler/issues/28
 
+cmd
+
 ```sh
 # gulp 命令行工具
 yarn global add gulp-cli
@@ -21,6 +23,8 @@ yarn add gulp gulp-vue-compiler babel-env
 # 执行 task
 gulp vue-compile
 ```
+
+gulpfile.js
 
 ```js
 let vueCompiler = require("gulp-vue-compiler");

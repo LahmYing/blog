@@ -6,6 +6,37 @@ tags: [css]
 
 <!-- toc -->
 
+# 0.5px
+
+```css
+/* 直接加 class 即可用 */
+[class*="mri-hairline"] {
+  position: relative;
+}
+
+[class*="mri-hairline"]::after {
+  position: absolute;
+  box-sizing: border-box;
+  content: " ";
+  pointer-events: none;
+  top: -50%;
+  right: -50%;
+  bottom: -50%;
+  left: -50%;
+  border: 0 solid #ddd;
+  -webkit-transform: scale(0.5);
+  transform: scale(0.5);
+}
+
+.mri-hairline--top::after {
+  border-top-width: 1px;
+}
+
+.mri-hairline--right::after {
+  border-right-width: 1px;
+}
+```
+
 # 适配刘海屏
 
 https://www.freesion.com/article/4541835441/
