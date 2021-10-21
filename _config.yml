@@ -3,12 +3,13 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: lahmying
+title: LahmYing
 subtitle: ""
 description: ""
 keywords:
 author: lanying
-language: zh
+language:
+  - zh-CN
 timezone: ""
 
 search:
@@ -115,7 +116,8 @@ ignore:
 # theme: landscape
 # theme: pacman
 # theme: hexo-theme-Claudia
-theme: landscape-plus
+# theme: landscape-plus
+theme: maupassant
 
 favicon: https://raw.githubusercontent.com/A-limon/pacman/master/source/img/favicon.ico
 
