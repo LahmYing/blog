@@ -1,5 +1,5 @@
 ---
-title: gulp+vue
+title: vue SFC 编译为 .js（使用gulp）
 date: 2021-10-09 14:34:05
 tags: [gulp, vue]
 ---

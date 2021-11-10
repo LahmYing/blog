@@ -1,5 +1,5 @@
 ---
-title: ts
+title: Typescript
 date: 2021-09-10 14:16:19
 tags: [Typescript]
 ---

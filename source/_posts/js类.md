@@ -8,7 +8,6 @@ tags: js
 
 # es6
 
-{% asset_img class_es6.png 1000 1000 %}
 class 内部都挂在 prototype 上，方便继承
 
 ```js
