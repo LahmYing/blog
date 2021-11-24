@@ -2,6 +2,7 @@
 title: cookie-session-token
 date: 2021-08-27 09:45:34
 tags: [网络运维, cookie]
+category: [网络运维]
 ---
 
 <!-- toc -->

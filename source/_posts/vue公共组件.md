@@ -2,6 +2,7 @@
 title: vue公共组件
 date: 2021-09-08 20:04:59
 tags: [vue]
+category: [vue]
 ---
 
 <!-- toc -->
@@ -77,7 +78,7 @@ export default {
 
 ### Message.vue
 
-```vue
+```html
 <template>
   <transition name="slide" @after-leave="afterLeave">
     <div v-if="show" :class="component_class" @click="show = false">

@@ -2,9 +2,33 @@
 title: js
 date: 2021-04-22 16:00:49
 tags: js
+category: [js]
 ---
 
 <!-- toc -->
+
+# for in, for of, forEach
+
+for in 语句以任意顺序迭代对象的可枚举属性
+for of 语句遍历可迭代对象定义要迭代的数据
+
+for in 是为遍历对象属性而构建的，不建议与数组一起使用，数组可以用 Array.prototype.forEach() 和 for of
+
+## 建议使用 for of 而不是 forEach
+
+forEach 会跳过空值
+
+```js
+const array1 = ["a", , "c"];
+
+for (const element of array1) {
+  console.log(element); //  a, undefined, c
+}
+
+array1.forEach((element) => {
+  console.log("forEach", element); // a, c
+});
+```
 
 # String
 
@@ -674,7 +698,7 @@ newObj.__proto__.constructor; // function Shape()
 
 # 堆栈
 
-{% asset_img 栈和堆.png 800 800 %}
+{% asset_img 栈和堆.png %}
 
 # apply-call-bind
 

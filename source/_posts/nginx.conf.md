@@ -2,6 +2,7 @@
 title: nginx.conf
 date: 2021-02-26
 tags: 网络运维
+category: [网络运维]
 ---
 
 <!-- toc -->

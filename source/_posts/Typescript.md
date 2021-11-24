@@ -1,7 +1,8 @@
 ---
-title: Typescript
+title: typescript
 date: 2021-09-10 14:16:19
-tags: [Typescript]
+tags: [typescript]
+category: [typescript]
 ---
 
 <!-- toc -->

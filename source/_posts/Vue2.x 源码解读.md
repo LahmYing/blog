@@ -1,7 +1,8 @@
 ---
-title: Vue
+title: vue2.x 源码解读
 date: 2021-08-26 19:40:09
 tags: [vue]
+category: [vue]
 ---
 
 <!-- toc -->
@@ -96,7 +97,7 @@ https://github.com/vuejs/vue/blob/dev/package.json
 
 ## flow
 
-js + type
+带类型的 js
 
 ```js
 /*@flow*/
@@ -134,78 +135,98 @@ new Vue({
 });
 ```
 
-## 生产中是有 new Vue() 的
+## 生产中的 new Vue()
 
-在 dist 中搜 new Vue() 即知, vue.runtime.min.js 被嵌在 app.[hash].js 里
+在 dist 中搜 new Vue()
 
-## Vue 定义
-
-src/core/instance/index.js
+vue.runtime.min.js 被嵌在 app.[hash].js 里
 
 ## 数据驱动的一些重要流程
 
-`new Vue(el, ...) -> vm.$option.el -> vm.$mount` 初始化生命周期、事件中心、渲染、data、props、computed、watcher 等等
+### new Vue 到 vm.$mount
 
-`template in el -> render() -> vm.$mount` 无论 SFC 的 还是 js 中的 template，都会转为 render()，然后再 $mount。 `el 挂载点`
+{% asset_img 1.new-Vue到vm.$mount.jpg %}
 
-### $mount
+### vm.$mount
 
-`Watcher(vm._render 生成虚拟 Node -> vm._update 更新 DOM) -> mounted hook` 初始化和监控的数据变动时触发 Watcher
+{% asset_img 2.生成VNode+更新DOM.png %}
 
-### `vm._render`
+### vm.\_render
 
-`vm._render -> render(内调用 createElement -> return vnode -> new VNode)`
+{% asset_img 3.vm._render().jpg %}
 
-### VNode 定义
+### vm.\_update
 
-src/core/vdom/vnode.js
-
-VNode and children VNode -> VNode tree
-
-### `vm._update`
-
-`vm._update -> vm.__patch__` 最后调用 DOM api: insertBefore、appendChild 等，插入顺序先子后父
+{% asset_img vm._update.png %}
 
 ## 组件化的一些重要流程
 
-### createComponent
+{% asset_img 组件化.png %}
 
-createComponent 和 createElement 的目的都是产出 VNode
-需要注意的是和普通元素节点的 vnode 不同，组件的 vnode 是没有 children vnode 的
+### 合并配置
 
-内逻辑
+配置最终合并到 vm.$options，发生场景：
 
-- 创建一个 Vue 子类 Sub
-- merge options
-- install hooks
-- return component VNode
-- new VNode
+- new Vue 的 this.\_init() 即实例化的初始化时
+- Vue.extend 即组件化时
 
 ### 生命周期
 
+#### 父子组件生命周期执行顺序
+
+- 父 created
+- 父 beforeMount
+- 子 created
+- 子 beforeMount
+- 子 mounted
+- 父 mounted
+
+#### 最终执行处
+
+在 `vm.$options` 中执行**钩子数组**，比如 `vm.$options.created`
+
+#### beforeCreate created
+
+beforeCreate -> initState -> created
+
+initState 的作用是初始化 props、data、methods、watch、computed 等属性
+
 #### beforeMount mounted
 
-`beforeMount hook -> 产出 VNode -> patch -> mounted hook`
+beforeMount hook -> vm.\_render() -> vm.\_update() -> mounted hook
 
 最后的 mounted hook，如果是组件 VNode 走到这一步，各个组件的 mounted hook 会被 push 到一个 queue，排队执行，先子后父
 
 #### beforeUpdate & updated
 
-mounted -> beforeUpdate hook -> watcher 执行完我们定义的程序 -> updated hook
+mounted -> beforeUpdate hook -> 进入 Watcher 实例 -> updated hook
 
-#### destroy
+在 Watcher 实例中： vm.\_render() 生成 VNode -> vm.\_update() 更新 DOM
+
+#### beforeDestroy destroy
+
+beforeDestroy -> 一系列销毁动作如删除 watcher、钩子 -> destroy
 
 destroy 钩子函数执行顺序是先子后父，和 mounted 过程一样
 
 ### 全局/局部组件
 
-Vue.options.components
-vm.$options.components
+#### 全局组件
+
+- Vue.component
+- 检测为组件类型，通过 Vue.extend， 然后赋给 Vue.options.components
+- -> Sub.options.components // 子组件是 Vue.extend 而来，Vue.options 被合并到 Sub.options
+- 取出 components 并组件化
+
+#### 局部组件
+
+- 取出 components 并组件化
 
 ### 异步组件
 
-估计：编译分 chunk 时标记 require、()=>import 的组件在哪个 chunk，到时就到哪个 chunk 找
-加载异步组件 -> vm.$forceUpdate()
+webpack 构建 chunk 时标记 require、()=>import 的组件在哪个 chunk，到时就到哪个 chunk 找
+
+加载异步组件后会通过 forceRender 强制重新渲染
 
 #### patch
 
@@ -213,9 +234,26 @@ vm.$options.components
 
 ## 响应式的一些重要流程
 
+### Object.defineProperty
+
+Object.defineProperty(obj, prop, descriptor)
+
+存取型的 descriptor 包含两个 key:
+
+- get: 属性的 getter 函数，访问属性时会触发
+- set: 当属性值被修改时，会调用此函数
+
+### 依赖收集 (getter) 派发更新 (setter)
+
+基于 getter setter 和订阅模式来做依赖收集和派发更新，实现数据的响应式
+
+{% asset_img reactive.png %}
+
+### nextTick
+
 patch 是一个异步过程， VNode -> nextTick -> DOM
 
-修改 msg 后 template 中 `<div id="MSG"> {{ msg }} </div>` 也正确修改了，此时浏览器上显示的 msg 也是修改后的，但是此时 `这个 tag 的 DOM 还没更新！`，console 下即知
+修改 msg 后 template 中 `<div id="MSG"> {{ msg }} </div>` 也正确修改了，此时浏览器上显示的 msg 也是修改后的，但是此时**_这个 tag 的 DOM 还没更新_**，console 下即知
 
 ```js
 this.$refs.MSG; // DOM 未更新
@@ -225,6 +263,13 @@ this.nextTick(() => {
 this.$refs.MSG; // DOM 未更新
 ```
 
+### 计算属性 侦听属性
+
+- 计算属性其实是 computed watcher
+
+- watcher options
+  - immediate: 刷新页面进入组件即触发一次该 watch 回调
+
 ## 扩展
 
 ### event
@@ -233,9 +278,9 @@ this.$refs.MSG; // DOM 未更新
 
 ### slot
 
-普通插槽和作用域插槽作用域的不同源于 `VNode` 在哪里渲染
+普通插槽和作用域插槽作用域的不同源于 VNode 在哪里渲染
 
-VNode 若直接在父组件渲染，则数据挂在父组件的 $options 下，子组件肯定不能直接访问
+VNode 若直接在父组件渲染，则数据挂在父组件的 vm.$options 下，子组件肯定不能直接访问
 
 作用域插槽是把部分数据相关的 VNode 也放到子组件中进行渲染，所以子组件就能直接访问
 
@@ -248,83 +293,3 @@ VNode 若直接在父组件渲染，则数据挂在父组件的 $options 下，�
 ## Vue-Router
 
 Vue-Router 的 install 方法（使用 Vue.mixin，mixin 作用是合并 options）会给每一个组件注入 beforeCreate 和 destoryed 钩子函数，在 beforeCreate 做一些私有属性定义和路由初始化工作
-
-# 其他
-
-## 覆盖组件库 ivew 样式
-
-main.js 中。 **_跟 CSS 文件的引用次序有关_**
-
-```js
-import "view-design/dist/styles/iview.css";
-// 定制主题色
-import "./assets/customTheme/index.less";
-```
-
-## vue 插件
-
-https://github.com/vuejs/awesome-vue
-
-## 样式覆盖、Vue 的 scoped 和 /deep/
-
-{% asset_img Vue的scoped和deep.png 1000 1000 image desc %}
-
-## 特性
-
-{% asset_img VueFeature.png 1000 1000 %}
-
-## Vue 中异步传 props 丢失数据
-
-- 子组件加上 v-if, 如
-
-```html
-<Child v-if="task.taskType === 21" :taskDetail="task" />
-```
-
-- 子组件中使用 watch
-
-## 引入 vue.min.js 时 vue-devtools 会失效
-
-## Vue router history mode
-
-需要服务端支持，只需要服务端在遇到任何路由都返回 index.html 即可（前端为单页应用的话）
-
-## vuex
-
-默认情况下，模块内部的 action、mutation 和 getter 是注册在全局命名空间的——这样使得多个模块能够对同一 mutation 或 action 作出响应
-
-## nextTick
-
-值更新， 值对应的 dom 未更新， 此时你想基于`更新后的 dom`执行 A 函数，需将 A 函数放于 nextTick 内
-
-```vue
-<template>
-  <div class="channel-manage">
-    channel-manage
-    <div id="next-tick-html">{{ "showDelModal: " }}{{ showDelModal }}</div>
-  </div>
-</template>
-
-<script lang="ts">
-import { Vue, Component, Prop, Watch } from "vue-property-decorator";
-import { State, Getter, Action } from "vuex-class";
-
-// required even empty
-@Component({})
-export default class ChannelList extends Vue {
-  showDelModal = false;
-
-  // life hook
-  created() {
-    this.showDelModal = true;
-
-    console.log("no-next-tick-value", this.showDelModal);
-    console.log("no-next-tick-dom", document.getElementById("next-tick-html"));
-    this.$nextTick(() => {
-      console.log("next-tick-value", this.showDelModal);
-      console.log("next-tick-dom", document.getElementById("next-tick-html"));
-    });
-  }
-}
-</script>
-```

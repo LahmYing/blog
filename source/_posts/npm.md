@@ -2,6 +2,7 @@
 title: npm
 date: 2021-08-26 20:38:03
 tags: [npm]
+category: [依赖管理]
 ---
 
 <!-- toc -->
@@ -21,8 +22,8 @@ tags: [npm]
 ## n
 
 n 是一个 npm 包，n 依赖于 node 环境
-安装 n
-`sudo npm install n -g`
+
+安装 n `sudo npm install n -g`
 
 ### 安装指定版本 node
 
@@ -65,7 +66,7 @@ npm 脚本就是 Shell 脚本，因为可以使用 Shell 通配符
 
 npm 脚本有 pre 和 post 两个钩子。举例来说，build 脚本命令的钩子就是 prebuild 和 postbuild
 
-执行 `npm run build` 时即执行 `npm run prebuild && npm run build && npm run postbuild`
+`npm run build` = `npm run prebuild && npm run build && npm run postbuild`
 
 # 执行顺序
 

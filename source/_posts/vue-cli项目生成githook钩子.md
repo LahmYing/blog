@@ -2,6 +2,7 @@
 title: vue-cli项目生成githook钩子
 date: 2021-08-26 19:02:01
 tags: [githook, vue]
+category: [vue]
 ---
 
 - vue create demo
