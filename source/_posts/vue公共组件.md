@@ -88,95 +88,95 @@ export default {
 </template>
 
 <style lang="less" scoped>
-.message {
-  position: fixed;
-  bottom: 60px;
-  left: 50%;
-  font-size: 14px;
-  color: #333;
-  padding: 5px 10px;
-  text-align: center;
-  overflow: hidden;
-  opacity: 0.9;
-  border-radius: 4px;
-  min-width: 60px;
-  max-width: 60%;
-  word-break: break-all;
-  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.16);
-  transform: translate(-50%, 0);
-  z-index: 10001;
+  .message {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    font-size: 14px;
+    color: #333;
+    padding: 5px 10px;
+    text-align: center;
+    overflow: hidden;
+    opacity: 0.9;
+    border-radius: 4px;
+    min-width: 60px;
+    max-width: 60%;
+    word-break: break-all;
+    box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.16);
+    transform: translate(-50%, 0);
+    z-index: 10001;
 
-  &.default {
-    color: #fff;
-    background-color: #333;
+    &.default {
+      color: #fff;
+      background-color: #333;
+    }
+
+    &.success {
+      color: #fff;
+      background-color: @success;
+    }
+
+    &.warning {
+      color: #fff;
+      background-color: @warning;
+    }
+
+    &.error {
+      color: #fff;
+      background-color: @error;
+    }
   }
 
-  &.success {
-    color: #fff;
-    background-color: @success;
+  .slide-enter-active,
+  .slide-leave-active {
+    transition: all 0.3s;
   }
-
-  &.warning {
-    color: #fff;
-    background-color: @warning;
+  .slide-enter,
+  .slide-leave-to {
+    transform: translate(-50%, 10px);
+    opacity: 0;
   }
-
-  &.error {
-    color: #fff;
-    background-color: @error;
-  }
-}
-
-.slide-enter-active,
-.slide-leave-active {
-  transition: all 0.3s;
-}
-.slide-enter,
-.slide-leave-to {
-  transform: translate(-50%, 10px);
-  opacity: 0;
-}
 </style>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+  import { Vue, Component } from "vue-property-decorator";
 
-@Component({})
-export default class Toast extends Vue {
-  show = false;
-  content = "";
-  time = 2000;
-  type = "default";
-  callback = null;
+  @Component({})
+  export default class Toast extends Vue {
+    show = false;
+    content = "";
+    time = 2000;
+    type = "default";
+    callback = null;
 
-  get component_class() {
-    return ["message", `${this.type}`];
+    get component_class() {
+      return ["message", `${this.type}`];
+    }
+
+    mounted() {
+      document.body.appendChild(this.$el);
+      this.time && setTimeout(this.close, this.time);
+    }
+
+    beforeDestroy() {
+      document.body.removeChild(this.$el);
+      this.callback &&
+        this.$nextTick(() => {
+          this.callback();
+        });
+    }
+
+    destroyed() {
+      this.$emit("destroyed");
+    }
+
+    close() {
+      this.show = false;
+    }
+
+    afterLeave() {
+      this.$destroy();
+    }
   }
-
-  mounted() {
-    document.body.appendChild(this.$el);
-    this.time && setTimeout(this.close, this.time);
-  }
-
-  beforeDestroy() {
-    document.body.removeChild(this.$el);
-    this.callback &&
-      this.$nextTick(() => {
-        this.callback();
-      });
-  }
-
-  destroyed() {
-    this.$emit("destroyed");
-  }
-
-  close() {
-    this.show = false;
-  }
-
-  afterLeave() {
-    this.$destroy();
-  }
-}
 </script>
 ```

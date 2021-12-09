@@ -185,5 +185,9 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/Geolocation/getCurrentPosition
 # embed 标签
 
 ```html
-<embed src="https://33e9-dev-upload.oss-cn-beijing.aliyuncs.com/executeTask/image/b9/b967216c5ca077f307785cdf8b817fd4.jpg" width="640" height="480">
+<embed
+  src="https://33e9-dev-upload.oss-cn-beijing.aliyuncs.com/executeTask/image/b9/b967216c5ca077f307785cdf8b817fd4.jpg"
+  width="640"
+  height="480"
+/>
 ```

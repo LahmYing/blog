@@ -62,25 +62,28 @@ https://github.com/vuejs/awesome-vue
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from "vue-property-decorator";
-import { State, Getter, Action } from "vuex-class";
+  import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+  import { State, Getter, Action } from "vuex-class";
 
-// required even empty
-@Component({})
-export default class ChannelList extends Vue {
-  showDelModal = false;
+  // required even empty
+  @Component({})
+  export default class ChannelList extends Vue {
+    showDelModal = false;
 
-  // life hook
-  created() {
-    this.showDelModal = true;
+    // life hook
+    created() {
+      this.showDelModal = true;
 
-    console.log("no-next-tick-value", this.showDelModal);
-    console.log("no-next-tick-dom", document.getElementById("next-tick-html"));
-    this.$nextTick(() => {
-      console.log("next-tick-value", this.showDelModal);
-      console.log("next-tick-dom", document.getElementById("next-tick-html"));
-    });
+      console.log("no-next-tick-value", this.showDelModal);
+      console.log(
+        "no-next-tick-dom",
+        document.getElementById("next-tick-html")
+      );
+      this.$nextTick(() => {
+        console.log("next-tick-value", this.showDelModal);
+        console.log("next-tick-dom", document.getElementById("next-tick-html"));
+      });
+    }
   }
-}
 </script>
 ```
