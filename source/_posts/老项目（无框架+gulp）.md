@@ -9,7 +9,7 @@ category: [项目]
 
 # 老项目（无框架+gulp）
 
-### package.json、.gitignore
+<!-- ### package.json、.gitignore -->
 
 ### 本地服务 && 保存即刷新页面
 
@@ -23,8 +23,8 @@ vue 中根据路由即 URL 的 hash 值，加载不同的 .vue 组件（ css js 
 
 ### 编译压缩 js、css、html
 
-定义的 js 方法名、css 类名等等保持不变，尽可能减少空格和字节，比如 `let t = this`
+定义的 js 方法名、css 类名等等保持不变，尽可能减少空格和字节
 
 ### 复制到 dist 文件夹
 
-images、库文件、压缩后的 css、js、html
+images、压缩后的 css、js、html、引用的第三方库

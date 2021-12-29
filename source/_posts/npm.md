@@ -1,7 +1,7 @@
 ---
 title: npm
 date: 2021-08-26 20:38:03
-tags: [npm]
+tags: [依赖管理]
 category: [依赖管理]
 ---
 

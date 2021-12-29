@@ -1,7 +1,7 @@
 ---
 title: yarn
 date: 2021-08-27 17:31:52
-tags: [yarn]
+tags: [依赖管理]
 category: [依赖管理]
 ---
 
