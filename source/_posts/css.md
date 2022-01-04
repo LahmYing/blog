@@ -40,29 +40,6 @@ category: [css]
 }
 ```
 
-# 适配刘海屏
-
-[CSS 适配刘海屏的几种方式](https://www.freesion.com/article/4541835441/)
-[了解 safe-area](https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/adaptivity-and-layout/)
-
-通过 safe-area 属性可知刘海区域高度，从而避开刘海区域展示内容
-
-## viewport-fit
-
-## env() 和 constant()
-
-CSS function
-
-```css
-/* constant env 顺序不要改 */
-padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
-padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
-
-padding-bottom: 20px;
-padding-bottom: calc(constant(safe-area-inset-bottom)+20px);
-padding-bottom: calc(env(safe-area-inset-bottom)+20px);
-```
-
 # css3 动画
 
 ## animation
