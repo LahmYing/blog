@@ -1,7 +1,7 @@
 ---
 title: GraphQL
 date: 2021-09-09 10:34:53
-tags: [接口风格]
+tags: [接口]
 ---
 
 <!-- toc -->

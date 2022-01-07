@@ -1,7 +1,7 @@
 ---
 title: 老项目（无框架+gulp）
 date: 2021-08-27 16:39:33
-tags: [项目, gulp]
+tags: [gulp]
 category: [项目]
 ---
 

@@ -118,6 +118,7 @@ ignore:
 # theme: hexo-theme-Claudia
 # theme: landscape-plus
 theme: maupassant
+# theme: hexo-theme-clean-dark
 
 favicon: https://raw.githubusercontent.com/A-limon/pacman/master/source/img/favicon.ico
 
