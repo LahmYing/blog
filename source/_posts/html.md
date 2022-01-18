@@ -138,7 +138,7 @@ BOM 包含 5 个东西
 
 {% asset_img 浏览器渲染流程.png %}
 
-- CSS 解析不会影响 HTML 解析，但会阻塞 js 的加载（即要等前面的 CSS 加载完）
+- CSS 解析和 HTML 解析是互不干扰的，但 CSS 解析会阻塞 js 的加载，因为浏览器在执行 js 前要确保之前的 CSS 规则树构建完毕。比如浏览器按顺序加载 a.css、b.js、c.css，那么 b.js 要等 a.css 阶段的 CSS 规则树构建完毕才会执行
 - js 会阻塞 HTML 和 CSS 的解析
 
 https://segmentfault.com/a/1190000010298038

@@ -1,5 +1,5 @@
 ---
-title: vue2.x 源码解读
+title: Vue2.x 源码解读
 date: 2021-08-26 19:40:09
 tags: [vue]
 category: [vue]
@@ -117,9 +117,9 @@ src
 
 ## Runtime Only VS Runtime + Compiler
 
-Compiler: template string -> AST -> code
+Compiler: template string -> AST -> code，只要有 template string，包括 SFC，都需要 Compiler
 
-只要有 template string，包括 SFC，都需要 Compiler
+Runtime 在运行时处理 `new Vue()` 等代码，构建后 `vue.runtime.min.js` 一般被嵌在 `app.[hash].js` 里
 
 ```js
 // 需要编译器的版本
@@ -135,13 +135,11 @@ new Vue({
 });
 ```
 
-## 生产中的 new Vue()
+## 数据驱动（从 Vue 实例化到 DOM 更新）
 
-在 dist 中搜 new Vue()
+### 总览
 
-vue.runtime.min.js 被嵌在 app.[hash].js 里
-
-## 数据驱动的一些重要流程
+{% asset_img 数据驱动.jpg %}
 
 ### new Vue 到 vm.$mount
 
@@ -159,9 +157,11 @@ vue.runtime.min.js 被嵌在 app.[hash].js 里
 
 {% asset_img vm._update.png %}
 
-## 组件化的一些重要流程
+## 组件内部工作流程
 
-{% asset_img 组件化.png %}
+### 创建组件类型 VNode
+
+{% asset_img 创建组件类型VNode.jpg %}
 
 ### 合并配置
 
@@ -181,7 +181,7 @@ vue.runtime.min.js 被嵌在 app.[hash].js 里
 - 子 mounted
 - 父 mounted
 
-#### 最终执行处
+#### 钩子执行处
 
 在 `vm.$options` 中执行**钩子数组**，比如 `vm.$options.created`
 
@@ -189,7 +189,7 @@ vue.runtime.min.js 被嵌在 app.[hash].js 里
 
 beforeCreate -> initState -> created
 
-initState 的作用是初始化 props、data、methods、watch、computed 等属性
+initState 的作用是初始化 props、data、methods、watch、computed 等属性，所以 beforeCreate 时是访问不到 data props 等的
 
 #### beforeMount mounted
 
@@ -211,20 +211,22 @@ destroy 钩子函数执行顺序是先子后父，和 mounted 过程一样
 
 ### 全局/局部组件
 
+{% asset_img 组件注册.jpg %}
+
 #### 全局组件
 
 - Vue.component
 - 检测为组件类型，通过 Vue.extend， 然后赋给 Vue.options.components
 - -> Sub.options.components // 子组件是 Vue.extend 而来，Vue.options 被合并到 Sub.options
-- 取出 components 并组件化
+- 取出 components 并参与 new VNode()
 
 #### 局部组件
 
-- 取出 components 并组件化
+- 取出 components 并参与 new VNode()
 
 ### 异步组件
 
-webpack 构建 chunk 时标记 require、()=>import 的组件在哪个 chunk，到时就到哪个 chunk 找
+webpack 构建 chunk 时标记 require、()=>import('组件') 的组件在哪个 chunk，到时就到哪个 chunk 找
 
 加载异步组件后会通过 forceRender 强制重新渲染
 
@@ -232,7 +234,7 @@ webpack 构建 chunk 时标记 require、()=>import 的组件在哪个 chunk，�
 
 会先给异步组件占位，方便后续的 patch 和 $forceUpdate()
 
-## 响应式的一些重要流程
+## 响应式
 
 ### Object.defineProperty
 
@@ -247,9 +249,13 @@ Object.defineProperty(obj, prop, descriptor)
 
 基于 getter setter 和订阅模式来做依赖收集和派发更新，实现数据的响应式
 
+{% asset_img reactive1.jpg %}
+
 {% asset_img reactive.png %}
 
 ### nextTick
+
+{% asset_img nextTick.jpg %}
 
 patch 是一个异步过程， VNode -> nextTick -> DOM
 
