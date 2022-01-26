@@ -29,6 +29,8 @@ tags: [webpack]
 
 ## 热更新
 
+{% asset_img 热更新.jpg %}
+
 webpack 给 bundle **_加塞_** 了两个文件，最终浏览器运行时多了两个文件：
 
 - webpack-dev-server/client/index.js，用来跟 webpack server **_进行 websocket 通信_** 的

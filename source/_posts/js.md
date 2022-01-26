@@ -463,10 +463,9 @@ console.log(add5(2)); // 7
 console.log(add10(2)); // 12
 ```
 
-# 定义+初始化+赋值
+<!-- # 定义+初始化+赋值
 
 - 与通过 var 声明的有初始化值 undefined 的变量不同，通过 let 声明的变量直到它们的定义被执行时才初始化
-- const 没有赋值这一过程
 
 ```js
 console.log(z); // undefined,即 z 被初始化为 undefined
@@ -480,7 +479,7 @@ console.log(a); // 2
 
 // 默认为通过 var 定义，挂在 global 下
 console.log(typeof undeclaredVariable); // undefined
-```
+``` -->
 
 # new（创建实例）
 
