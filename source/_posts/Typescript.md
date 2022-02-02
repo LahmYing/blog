@@ -7,6 +7,10 @@ category: [typescript]
 
 <!-- toc -->
 
+# 参考
+
+https://ts.xcatliu.com/#%E5%85%B3%E4%BA%8E%E6%9C%AC%E4%B9%A6
+
 # 终端运行 TS 文件
 
 `yarn global add typescript`
@@ -330,12 +334,7 @@ const enum Directions {
   Left,
   Right,
 }
-let directions = [
-  Directions.Up,
-  Directions.Down,
-  Directions.Left,
-  Directions.Right,
-];
+let directions = [Directions.Up, Directions.Down, Directions.Left, Directions.Right];
 // 编译结果
 var directions = [0 /* Up */, 1 /* Down */, 2 /* Left */, 3 /* Right */];
 ```
