@@ -7,6 +7,10 @@ category: [js]
 
 <!-- toc -->
 
+# 一些概念
+
+见 https://github.com/LahmYing/front-end-tools/tree/master/%E8%AF%AD%E8%A8%80/js
+
 # for in, for of, forEach
 
 for in 语句以任意顺序迭代对象的可枚举属性
