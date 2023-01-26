@@ -7,7 +7,6 @@
     "clean": "hexo clean",
     "deploy": "hexo deploy",
     "serve": "hexo server",
-    "preserve": "yarn format",
     "format": "prettier -w ./source/**/*.md",
     "format-generated": "prettier -w ./public/*/**/*.html"
   },
