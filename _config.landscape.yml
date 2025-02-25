@@ -1,0 +1,3 @@
+sidebar:
+  category: false # 隐藏 Categories
+  recent_posts: false # 隐藏 Recent Posts

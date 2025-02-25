@@ -2,30 +2,27 @@
 ## Docs: https://hexo.io/docs/configuration.html
 ## Source: https://github.com/hexojs/hexo/
 
+# hexo-toc 配置
+toc:
+  # 是否启用目录生成，设置为 true 启用，false 禁用
+  enable: true
+  # 目录的深度，例如 2 表示只生成到二级标题的目录
+  depth: 4
+  # 目录的标题，可自定义，留空则不显示标题
+  title: 目录
+  # 自定义目录的 HTML 类名，方便进行样式定制
+  # className: my-toc-class
+  # 目录在文章中的插入位置，可选值为 'before'（在文章开头插入）、'after'（在文章结尾插入）
+  position: "before"
+
 # Site
-title: LahmYing
+title: Hexo
 subtitle: ""
 description: ""
 keywords:
-author: lanying
-language:
-  - zh-CN
+author: John Doe
+language: en
 timezone: ""
-
-search:
-  path: search.xml
-  field: post
-  content: true
-
-toc:
-  maxdepth: 3
-  class: toc
-  slugify: transliteration
-  decodeEntities: false
-  # anchor:
-    # position: before
-    # symbol: "#"
-    # style: header-anchor
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
@@ -59,15 +56,14 @@ render_drafts: false
 post_asset_folder: true
 relative_link: false
 future: true
+syntax_highlighter: highlight.js
 highlight:
-  enable: true
   line_number: true
   auto_detect: false
   tab_replace: ""
   wrap: true
   hljs: false
 prismjs:
-  enable: false
   preprocess: true
   line_number: true
   tab_replace: ""
@@ -113,35 +109,9 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-# theme: landscape
-# theme: pacman
-# theme: hexo-theme-Claudia
-# theme: landscape-plus
-theme: maupassant
-# theme: hexo-theme-clean-dark
-
-favicon: https://raw.githubusercontent.com/A-limon/pacman/master/source/img/favicon.ico
+theme: adagio
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: ""
-
-jsonContent:
-  meta: false
-  pages: false
-  posts:
-    title: true
-    date: true
-    path: true
-    text: false
-    raw: false
-    content: false
-    slug: false
-    updated: false
-    comments: false
-    link: false
-    permalink: false
-    excerpt: false
-    categories: false
-    tags: true
