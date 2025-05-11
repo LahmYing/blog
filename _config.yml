@@ -114,4 +114,7 @@ theme: adagio
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ""
+  type: git
+  repo:
+    coding: git@e.coding.net:g-ojim3086/lahmying/blog.git
+  branch: main
