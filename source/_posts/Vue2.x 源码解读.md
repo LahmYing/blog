@@ -147,7 +147,7 @@ new Vue({
 
 ### vm.$mount
 
-{% asset_img 2.生成VNode+更新DOM.png %}
+{% asset_img 2$mount.png %}
 
 ### vm.\_render
 
